@@ -12,6 +12,8 @@ import SwiftUI
 enum GoalInfoTarget {
     case registerPurpose(mandalrtID: String)
     case registerNode(purposeID: String, node: Node)
+    case editNode(purposeID: String, node: Node)
+    case purposeHints(hintsFor: String)
 }
 
 extension GoalInfoTarget: TargetType {
@@ -23,6 +25,8 @@ extension GoalInfoTarget: TargetType {
         switch self {
         case .registerPurpose: return "/v0/purpose"
         case .registerNode(let purposeID, _): return "/v0/purpose/\(purposeID)/"
+        case .editNode(let purposeID, let node): return "/v0/purpose/\(purposeID)/node/\(node.id ?? "")"
+        case .purposeHints: return "/v0/purpose/hints"
         }
     }
 
@@ -32,16 +36,25 @@ extension GoalInfoTarget: TargetType {
             return .post
         case .registerNode:
             return .post
+        case .editNode:
+            return .put
+        case .purposeHints:
+            return .get
         }
     }
 
     var task: Task {
-        let urlParameters = ["tracking_id": UserInfoManager.shared.trackingID]
+        var urlParameters = ["tracking_id": UserInfoManager.shared.trackingID]
         switch self {
         case .registerPurpose(let mandalrtID):
             return .requestCompositeParameters(bodyParameters: ["mandalart_id": mandalrtID], bodyEncoding: URLEncoding.default, urlParameters: urlParameters)
         case .registerNode(_, let node):
             return .requestCompositeParameters(bodyParameters: node.dictionary, bodyEncoding: URLEncoding.default, urlParameters: urlParameters)
+        case .editNode(_, let node):
+            return .requestCompositeParameters(bodyParameters: node.dictionary, bodyEncoding: URLEncoding.default, urlParameters: urlParameters)
+        case .purposeHints(let index):
+            urlParameters["hints_for"] = index
+            return .requestParameters(parameters: urlParameters, encoding: URLEncoding.default)
         }
     }
 
@@ -57,8 +70,9 @@ extension GoalInfoTarget: TargetType {
 }
 
 struct Node: Codable {
-    let level: Int
-    let postion: Int
-    let title: String
+    let level: Int?
+    let postion: Int?
+    let title: String?
     let content: String?
+    let id: String?
 }
