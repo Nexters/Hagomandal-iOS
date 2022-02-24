@@ -1,0 +1,35 @@
+//
+//  FirstGoalView.swift
+//  CardAnimation
+//
+//  Created by toby.with on 2022/01/28.
+//
+
+import SwiftUI
+
+struct FirstGoalView: View {
+    var goal: Goal
+    @State var content: String = ""
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("\(goal.title)")
+                .bold()
+                .font(.title2)
+            TextField("", text: $content)
+                .frame(height: 90, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        }
+        .padding(15)
+        .foregroundColor(.white)
+        .frame(height: 150, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        .background(goal.color)
+        .cornerRadius(18)
+    }
+}
+
+struct CardView_Previews: PreviewProvider {
+    static var previews: some View {
+        FirstGoalView(goal: testGoals[0])
+            .previewLayout(.sizeThatFits)
+    }
+}
