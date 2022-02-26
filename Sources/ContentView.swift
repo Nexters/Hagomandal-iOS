@@ -9,8 +9,18 @@
 import SwiftUI
 
 struct ContentView: View {
-
+    @State var shouldShowOnboarding: Bool = true
+    
     var body: some View {
-        Text("Hello Robot")
+        OnboardingView()
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            OnboardingView()
+            GuideView()
+        }
     }
 }

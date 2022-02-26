@@ -9,24 +9,26 @@
 import SwiftUI
 
 struct GuideView: View {
-    @State private var index: Int = 0
-    @Binding var isLast: Bool
-    
-    var logoArray = ["", "", "", "splash"]
-    var textArray = ["만다라트는 목표 구체화에\n효과적인 발상기법이야!",
+    var titleArray = ["만다라트는 목표 구체화에\n효과적인 발상기법이야!",
                      "핵심 목표 달성을 위한\n세부 목표 키워드를 정하고,",
-                     "행동으로 옮기기 위한\n실천 목표를 세워보는거야!",
-                     "자 그럼 만다라트를 활용해서\n목표를 세우러 가볼까?"]
+                     "행동으로 옮기기 위한\n실천 목표를 세워보는거야!"]
     
     var body: some View {
-        PageView(index: $index, logoName: logoArray[index], text: textArray[index], guideName: "guide\(index)")
-            .onTapGesture {
-                if index < 3 {
-                    index += 1
-                    print(index)
-                }
-                
-                isLast = (index == 4 ? true : false)
+        ZStack {
+            Color(hex: "#141414")
+                .ignoresSafeArea()
+            TabView {
+                PageView(title: titleArray[0], smallImageName: "", largeImageName: "guide0", showSkipButton: true)
+                PageView(title: titleArray[1], smallImageName: "", largeImageName: "guide1", showSkipButton: true)
+                PageView(title: titleArray[2], smallImageName: "", largeImageName: "guide2", showSkipButton: true)
             }
+            .tabViewStyle(PageTabViewStyle())
+        }
+//        PageView(title: "자 그럼 만다라트를 활용해서\n목표를 세우러 가볼까?", smallImageName: "splash", largeImageName: "guide3", showGuideButton: true)
+//        ButtonView(title: "좋아, 가보자!", hexColor: "#00c25e") {
+//            //@todo: 온보딩6 화면 이동
+//            print("온보딩6 화면 이동")
+//        }
+//        .padding([.leading, .trailing], 20)
     }
 }
